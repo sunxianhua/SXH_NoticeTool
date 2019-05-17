@@ -9,76 +9,88 @@
 import Foundation
 import UIKit
 
-//扩展
-extension UIResponder {
-    
-    //只显示提示语 并且在 1.5秒后自动消失
-    func showTextRemindView(noticeString :String,superView :UIView?){
-        
-        _ = SXH_SwiftNoticeTool().showNoticeImage(imageName: nil, noticeString: noticeString, superView: superView, autoClear: true, autoClearTime: 1.5, callBlock: nil)
-        
-    }
-    
-    
-    //显示提示界面，不自动消失，有点击回调(点击后当前提示语消失)
-    func showTextRemindView(imageName :String?,noticeString :String,superView :UIView?,clickBlock :(()->Void)?){
-        
-        //出现提示界面
-        let noticeTool = SXH_SwiftNoticeTool()
-        
-        noticeTool.showNoticeImage(imageName: imageName, noticeString: noticeString, superView: superView, autoClear: false, autoClearTime: nil, callBlock: nil).clickCallback {
-            
-            //点击回调
-            SXH_SwiftNoticeTool.clearView(superView: superView)
-            guard let block = clickBlock else {
-                return
-            }
-            block()
-        }
-    }
-    
-    
-    //显示网络请求等待菊花圈
-    func showWaitNotice(noticeString :String,superView :UIView?,clickBlock :(()->Void)?){
-        
-        SXH_SwiftNoticeTool.showWaitNoticeView(noticeString: noticeString, superView: superView).clickCallback {
-            
-            //点击回调
-            SXH_SwiftNoticeTool.clearView(superView: superView)
-            guard let block = clickBlock else {
-                return
-            }
-            block()
-        }
-        
-    }
-    
-    
-    
-    //有 成功/失败/警告 类型标志的 提示框，不自动消失，带点击事件
-    func showRemindNoticeTypeView(remindType :RemindType,noticeString :String,superView :UIView?,autoClearTime :Double?,callBlock :(()->Void)?){
-        
-        _ = SXH_SwiftNoticeTool().showRemindTypeView(remindType: remindType, noticeString: noticeString, superView: superView, autoClear: (autoClearTime != nil), autoClearTime: autoClearTime, callBlock: callBlock)
-        
-    
-    }
-    
-    
-    
-    
-}
-
-
-
 class SXH_SwiftNoticeTool: NSObject {
     
     static var theWindows :[UIView] = Array()
     static var falgeTag :Int = 1000
     static var theAutoClear :Bool = true
     
+    
+    //MARK:------------常用的一些提示方法 自动消失的弹框---------------
+    //普通的 短暂提示
+    static func showRemindText(text :String,callBlock :(()->Void)?){
+        
+        _ = SXH_SwiftNoticeTool().showNoticeImage(imageName: nil, noticeString: text, superView: nil, autoClear: true, autoClearTime: 1.5, callBlock: callBlock)
+      
+    }
+    
+    
+    //显示网络请求等待菊花圈
+    static func showWaitNotice(text :String,clickBlock :(()->Void)?){
+        
+        SXH_SwiftNoticeTool.showWaitNoticeView(noticeString: text, superView: nil).clickCallback {
+            //点击回调
+            SXH_SwiftNoticeTool.clearView(superView: nil)
+            guard let block = clickBlock else {
+                return
+            }
+            block()
+        }
+    }
+    
+    
+    //成功提示
+    static func showSuccessNotice(text :String,callBlock :(()->Void)?){
+        
+        _ = SXH_SwiftNoticeTool().showRemindTypeView(remindType: .success_remind, noticeString: text, superView: nil, autoClear: true, autoClearTime: 1.5, callBlock: callBlock)
+    }
+    
+    //错误提示
+    static func showErrorNotice(text :String,callBlock :(()->Void)?){
+        _ = SXH_SwiftNoticeTool().showRemindTypeView(remindType: .error_remind, noticeString: text, superView: nil, autoClear: true, autoClearTime: 1.5, callBlock: callBlock)
+    }
+    
+    //警告提示
+    static func showInforNotice(text :String,callBlock :(()->Void)?){
+        
+        _ = SXH_SwiftNoticeTool().showRemindTypeView(remindType: .notice_remind, noticeString: text, superView: nil, autoClear: true, autoClearTime: 1.5, callBlock: callBlock)
+    }
+    
+    
+    //显示提示界面，不自动消失，有点击回调(点击后当前提示语消失)
+    static func showTextRemindView(imageName :String?,noticeString :String,superView :UIView?,clickBlock :(()->Void)?){
+
+        //出现提示界面
+        let noticeTool = SXH_SwiftNoticeTool()
+        noticeTool.showNoticeImage(imageName: imageName, noticeString: noticeString, superView: superView, autoClear: false, autoClearTime: nil, callBlock: nil).clickCallback {
+
+            //点击回调
+            SXH_SwiftNoticeTool.clearView(superView: superView)
+            guard let block = clickBlock else {
+                return
+            }
+            block()
+        }
+    }
+
+    
+    
+    
+    //有 成功/失败/警告 类型标志的 提示框，不自动消失，带点击事件
+    static func showRemindNoticeTypeView(remindType :RemindType,noticeString :String,superView :UIView?,autoClearTime :Double?,callBlock :(()->Void)?){
+        _ = SXH_SwiftNoticeTool().showRemindTypeView(remindType: remindType, noticeString: noticeString, superView: superView, autoClear: (autoClearTime != nil), autoClearTime: autoClearTime, callBlock: callBlock)
+    }
+    
+    
+    
+    
+    
+    
+    
+    //MARK:--------可用于自定义弹框的一些方法----------
+    
     /*
                               传入图片名的提示语
-     
      imageName :提示语图片名
      noticeString :提示语
      superView  :提示控件父视图  ---  如果该值为空，则会将提示控件覆盖到新建的window上面
@@ -91,7 +103,6 @@ class SXH_SwiftNoticeTool: NSObject {
         
         
         let imageView :UIImageView? = imageName == nil ? nil : UIImageView.init(image: UIImage.init(named: imageName!))
-        
         
         //有父视图 superView  则直接在父视图上添加
         let remindView :RemindView!
@@ -192,12 +203,14 @@ class SXH_SwiftNoticeTool: NSObject {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
             
             SXH_SwiftNoticeTool.clearView(superView: superView)
+            if callBlock != nil {
+                callBlock!()
+            }
+            
         }
-        
         
         return remindView
     }
-    
     
     
     

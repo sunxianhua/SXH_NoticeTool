@@ -66,26 +66,24 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
 
         switch indexPath.row {
         case 0:
-            self.showTextRemindView(noticeString: cellStringArray[indexPath.row], superView: nil)
+            SXH_SwiftNoticeTool.showRemindText(text: "提示文字", callBlock: nil)
         case 1:
-            self.showTextRemindView(imageName: "warning-icon", noticeString: cellStringArray[indexPath.row] + "\n点击消失", superView: self.view) {
+            SXH_SwiftNoticeTool.showTextRemindView(imageName: "warning-icon", noticeString: cellStringArray[indexPath.row] + "\n点击消失", superView: self.view) {
                 SXH_SwiftNoticeTool.clearView(superView: self.view)
             }
             
         case 2:
             
-            self.showWaitNotice(noticeString: cellStringArray[indexPath.row] + "点击消失", superView: self.view) {
-                
-                SXH_SwiftNoticeTool.clearView(superView: self.view)
+            SXH_SwiftNoticeTool.showWaitNotice(text: cellStringArray[indexPath.row] + "点击消失") {
+                print("我消失了")
             }
+            
         case 3:
             
             
             let block :((RemindType)->Void) = { theType in
-                
-                
                 //2秒后自动消失
-                self.showRemindNoticeTypeView(remindType: theType, noticeString: self.cellStringArray[indexPath.row] + "点击消失", superView: self.view, autoClearTime: 2, callBlock: {
+                SXH_SwiftNoticeTool.showRemindNoticeTypeView(remindType: theType, noticeString: self.cellStringArray[indexPath.row] + "点击消失", superView: self.view, autoClearTime: 2, callBlock: {
                     
                     print("消失了")
                 })

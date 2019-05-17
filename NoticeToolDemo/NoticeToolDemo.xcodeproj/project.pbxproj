@@ -103,7 +103,7 @@
 			children = (
 				ED94481C213686300097A5E4 /* AppDelegate.swift */,
 				ED94481E213686300097A5E4 /* ViewController.swift */,
-				ED94485021377FE60097A5E4 /* SDK */,
+				ED94485021377FE60097A5E4 /* TipNoticeTool */,
 				ED944823213686310097A5E4 /* Assets.xcassets */,
 				ED944825213686310097A5E4 /* LaunchScreen.storyboard */,
 				ED944828213686310097A5E4 /* Info.plist */,
@@ -129,14 +129,14 @@
 			path = NoticeToolDemoUITests;
 			sourceTree = "<group>";
 		};
-		ED94485021377FE60097A5E4 /* SDK */ = {
+		ED94485021377FE60097A5E4 /* TipNoticeTool */ = {
 			isa = PBXGroup;
 			children = (
 				ED94485321377FE60097A5E4 /* SXH_SwiftNoticeTool.swift */,
 				ED9448572137D1DC0097A5E4 /* Classes.swift */,
 				ED94485221377FE60097A5E4 /* ExtesionUI.swift */,
 			);
-			path = SDK;
+			path = TipNoticeTool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
