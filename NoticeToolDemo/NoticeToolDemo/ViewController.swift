@@ -29,6 +29,9 @@ class ViewController: UIViewController {
         tableView.delegate   = self
         tableView.dataSource = self
         
+        print("测试橘子");
+        print("测试橘子2");
+        print("测试橘子3");
     }
     
     
